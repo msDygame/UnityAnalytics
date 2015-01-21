@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Example : MonoBehaviour 
 {
-    public string sDebug = "...";
 	void Awake()
     {
     }
@@ -22,50 +21,45 @@ public class Example : MonoBehaviour
 
 	void OnGUI()
 	{
-        GUI.Label(new Rect(10, 310, 600, 20), sDebug);
-        if (GUI.Button(new Rect( 10, 10, 190, 90), "User is a Boy"))
-        {            
-            int iYear = UnityEngine.Random.Range(1, 10000);
-            UnityAnalyticsIntegration.Instance().UserData(0,iYear,0,"smith");
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog() ;
-        }
-        if (GUI.Button(new Rect(210, 10, 190, 90), "User is a Girl"))
+        if (GUI.Button(new Rect( 10, 10, 190, 90), "Set User Data"))
         {
-            int iYear = UnityEngine.Random.Range(1, 10000);
-            UnityAnalyticsIntegration.Instance().UserData(1, iYear, 0, "Mary");
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
+            int iGender = UnityEngine.Random.Range(0, 3);//M,F,U
+            int iYear = UnityEngine.Random.Range(1, 10000);//1~9999
+            int iRandomName = UnityEngine.Random.Range(1, 6);//1~5
+            string sName = "";
+            //Test UserID 是否影響 newUser
+            if (iRandomName == 1) sName = "smith";
+            else if (iRandomName == 2) sName = "mary";
+            else if (iRandomName == 3) sName = "Frog";
+            else if (iRandomName == 4) sName = "john";
+            else if (iRandomName == 5) sName = "mist";
+            UnityAnalyticsIntegration.Instance().UserData(iGender,iYear, 0, sName);
         }
-        if (GUI.Button(new Rect(410, 10, 190, 90), "User is a Unknown"))
+        if (GUI.Button(new Rect(210, 10, 190, 90), "Event:Quit"))
         {
-            int iYear = UnityEngine.Random.Range(1, 10000);
-            UnityAnalyticsIntegration.Instance().UserData(2, iYear, 0, "Forsaken");
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
+            int iCount = UnityEngine.Random.Range(1, 10);
+            UnityAnalyticsIntegration.Instance().Customized("GameQuit", "how many times dies?", iCount);
+            //
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
         if (GUI.Button(new Rect(10, 110, 190, 90), "Event:GameStart"))
         {
             int iMoney = UnityEngine.Random.Range(1, 1000);
             UnityAnalyticsIntegration.Instance().Customized("GameStart","how many money?",iMoney) ;
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
         }
         if (GUI.Button(new Rect(210, 110, 190, 90), "Event:VersionCheck"))
         {
             string s = Application.unityVersion ;
             UnityAnalyticsIntegration.Instance().Customized("VersionCheck", "unity version=", s);
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
         }
         if (GUI.Button(new Rect(410, 110, 190, 90), "Event:GameVersionCheck"))
         {
             string s = "1.0.0.1";
             UnityAnalyticsIntegration.Instance().Customized("VersionCheck", "game version=", s);
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
-        }
-        if (GUI.Button(new Rect(610, 110, 190, 90), "Event:GameQuit"))
-        {
-            int iCount = UnityEngine.Random.Range(1, 10);
-            UnityAnalyticsIntegration.Instance().Customized("GameQuit", "how many times dies?", iCount);
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
-            //
-            Application.Quit();
         }
         if (GUI.Button(new Rect(10, 210, 190, 90), "User Buy item 1"))
         {   
@@ -75,7 +69,6 @@ public class Example : MonoBehaviour
                 int iMoney = UnityEngine.Random.Range(1, 1000);
                 UnityAnalyticsIntegration.Instance().Advanced("noodles", iMoney, "TWD");
             }
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
         }
         if (GUI.Button(new Rect(210, 210, 190, 90), "User Buy item 2"))
         {
@@ -85,7 +78,6 @@ public class Example : MonoBehaviour
                 int iMoney = UnityEngine.Random.Range(1, 40);
                 UnityAnalyticsIntegration.Instance().Advanced("sodawater", iMoney, "USD");
             }
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
         }
         if (GUI.Button(new Rect(410, 210, 190, 90), "User Buy item 3"))
         {
@@ -93,19 +85,8 @@ public class Example : MonoBehaviour
             for (int i = 0; i < iCount; i++)
             {
                 int iMoney = UnityEngine.Random.Range(1, 200);
-                UnityAnalyticsIntegration.Instance().Advanced("oil", iMoney, "RMB");
+                UnityAnalyticsIntegration.Instance().Advanced("oil", iMoney, "DYCoin");
             }
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
-        }
-        if (GUI.Button(new Rect(610, 210, 190, 90), "User Buy item 4"))
-        {
-            int iCount = UnityEngine.Random.Range(1, 10);
-            for (int i = 0; i < iCount; i++)
-            {
-                int iMoney = UnityEngine.Random.Range(1, 20000);
-                UnityAnalyticsIntegration.Instance().Advanced("gold", iMoney, "DYCoin");
-            }
-            sDebug = UnityAnalyticsIntegration.Instance().DebugLog();
         }
 	}
 }

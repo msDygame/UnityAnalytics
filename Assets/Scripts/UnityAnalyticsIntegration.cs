@@ -4,22 +4,19 @@ using UnityEngine.Cloud.Analytics;
 using System.Collections.Generic;//for Dictionary
 public class UnityAnalyticsIntegration : MonoBehaviour 
 {
-    public string appId = "e84c3ea1982c41258df800e8e9573b8a";   
+    /*
+     *  Unity Account : ResearchDevelopment.Dygame@gmail.com
+     *  Password : Aibelive!2345
+     *  Security question: What is the sum of 6 + 9? 15
+     */
+    public string appId1 = "e84c3ea1982c41258df800e8e9573b8a";//test project 1 = "Unity461Analytics"
+    public string appId2 = "df9f1696019f99b75fc4fda400890005";//test project 2 = "TestUnityAnalytics"
+    public bool IsUseAppId1 = true;
     //self
     protected static UnityAnalyticsIntegration Self;
-    //debug log
-    protected string sDebugLog = "";
     //
     void Awake()
     {
-        /*
-         *  Unity Account : ResearchDevelopment.Dygame@gmail.com
-         *  Password : Aibelive!2345
-         *  Security question: What is the sum of 6 + 9? 15
-         */
-        /*
-         * There is no report data processed for your project yet. Please check back after 4 hours.
-         */
     }
     // Use this for initialization
     void Start () 
@@ -31,21 +28,25 @@ public class UnityAnalyticsIntegration : MonoBehaviour
          * 為了獲取越齊全的數據，我們建議把這隻程式貼在你遊戲一進來的第一個場景裡。
          * 要把程式貼到物件上只要從Project介面把AnalyticsIntegration這支程式拖到Scene介面上的物件(例如Main Camera)上即可。
          */
-        UnityAnalytics.StartSDK (appId);
-        sDebugLog = appId;
+        if (IsUseAppId1 == true)
+            UnityAnalytics.StartSDK(appId1);
+        else
+            UnityAnalytics.StartSDK(appId2);
     }
     // Update is called once per frame
     void Update () 
     {
 	
 	}
+    //
+    void OnGUI()
+    {
+    }
     //Instance 
     public static UnityAnalyticsIntegration Instance()
     {
         return Self;
     }
-    //debug log
-    public string DebugLog() { return sDebugLog; } 
     // Use this call for each and every place that a player triggers a monetization event
     public void Advanced(string productId, decimal price, string currency)
     {                
@@ -63,7 +64,6 @@ public class UnityAnalyticsIntegration : MonoBehaviour
          *  UnityAnalytics.Transaction("12345abcde", 0.99m, "USD", null, null);
          */
         UnityAnalytics.Transaction(productId, price, currency, null, null);
-        sDebugLog = "UnityAnalytics.Transaction";
     }
     //
     public void Customized(string customEventName,string eventDataString,object eventDataObject)
@@ -91,7 +91,6 @@ public class UnityAnalyticsIntegration : MonoBehaviour
         {
             { eventDataString, eventDataObject }
         });
-        sDebugLog = "UnityAnalytics.CustomEvent";
     }
     //
     public void UserData(int iUserGender, int iYear, int iLogLevel , string sUserID)
@@ -101,7 +100,7 @@ public class UnityAnalyticsIntegration : MonoBehaviour
         SexEnum gender = SexEnum.U;
         if (iUserGender == 0) gender = SexEnum.M;
         if (iUserGender == 1) gender = SexEnum.F;
-        //哪一年出，必須是4個數字        
+        //哪一年出生，必須是4個數字        
         if (iYear < 0) iYear = 0;
         if (iYear > 10000) iYear = 9999;
         int birthYear = iYear;
@@ -119,6 +118,5 @@ public class UnityAnalyticsIntegration : MonoBehaviour
         UnityAnalytics.SetUserBirthYear(iYear);
         UnityAnalytics.SetLogLevel(DefaultLogLevel, true);
         UnityAnalytics.SetUserId(UserID);
-        sDebugLog = "UnityAnalytics.4Funcs";
     }
 }
