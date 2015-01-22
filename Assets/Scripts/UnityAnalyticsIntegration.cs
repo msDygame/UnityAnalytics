@@ -11,7 +11,12 @@ public class UnityAnalyticsIntegration : MonoBehaviour
      */
     public string appId1 = "e84c3ea1982c41258df800e8e9573b8a";//test project 1 = "Unity461Analytics"
     public string appId2 = "df9f1696019f99b75fc4fda400890005";//test project 2 = "TestUnityAnalytics"
-    public bool IsUseAppId1 = true;
+    public string appId3 = "7c9c2abdad399763bf10c8e9678977f6";//test project 3 = "UnityAnalyticsTestPC" ;//pc
+    public string appId4 = "2d044d3069f1aa4df810ddad7b6d9eab";//test project 4 = "UnityAnalyticsTestVPN" ;//pc
+    public string appId5 = "7d9a8f0a4bae3f16a9094705a300f6fe";//test project 5 = "UnityAnalyticsTestWifi" ;//android
+    public string appId6 = "f8c97b854b71f42c39c6e415778e7401";//test project 6 = "UnityAnalyticsTestAndroid" ;//android
+    protected bool IsDoOnce = false;
+    //"userid": "8e205891fc63b3861ff13ca1b03fe3f3fe730689" ? where is it from ?
     //self
     protected static UnityAnalyticsIntegration Self;
     //
@@ -27,11 +32,8 @@ public class UnityAnalyticsIntegration : MonoBehaviour
          * 這支程式會初始化Analytics SDK並開始蒐集數據，你可以將這隻程式貼到任一場景裡的物件上來初始化分析流程。(記得appID要改成你自己的)
          * 為了獲取越齊全的數據，我們建議把這隻程式貼在你遊戲一進來的第一個場景裡。
          * 要把程式貼到物件上只要從Project介面把AnalyticsIntegration這支程式拖到Scene介面上的物件(例如Main Camera)上即可。
-         */
-        if (IsUseAppId1 == true)
-            UnityAnalytics.StartSDK(appId1);
-        else
-            UnityAnalytics.StartSDK(appId2);
+         * UnityAnalytics.StartSDK(appId);
+         */        
     }
     // Update is called once per frame
     void Update () 
@@ -47,6 +49,23 @@ public class UnityAnalyticsIntegration : MonoBehaviour
     {
         return Self;
     }
+    //init UnityAnalytics
+    public void Initialize(int iSellectAppId)
+    {
+        if (IsDoOnce) return;
+        //
+        string appId = "";
+        if (iSellectAppId == 1) appId = string.Copy(appId1);
+        else if (iSellectAppId == 2) appId = string.Copy(appId2);
+        else if (iSellectAppId == 3) appId = string.Copy(appId3);
+        else if (iSellectAppId == 4) appId = string.Copy(appId4);
+        else if (iSellectAppId == 5) appId = string.Copy(appId5);
+        else if (iSellectAppId == 6) appId = string.Copy(appId6);
+        UnityAnalytics.StartSDK(appId);
+        IsDoOnce = true;
+    }
+    //
+    public bool DoOnce() { return IsDoOnce;  }
     // Use this call for each and every place that a player triggers a monetization event
     public void Advanced(string productId, decimal price, string currency)
     {                
