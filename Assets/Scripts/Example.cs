@@ -5,6 +5,8 @@ public class Example : MonoBehaviour
 {
     protected bool IsInit = false;
     protected bool IsRandom = true;
+    protected int  iCount = 1;
+    protected int  iMoney = 0;
 	void Awake()
     {
     }
@@ -41,17 +43,18 @@ public class Example : MonoBehaviour
                 int iYear = UnityEngine.Random.Range(1, 10000);//1~9999
                 int iRandomName = UnityEngine.Random.Range(1, 6);//1~5
                 string sName = "";
-                //Test UserID 是否影響 newUser
+                //Test UserID 是否影響 newUser ;//已證明:沒影響
                 if (iRandomName == 1) sName = "smith";
                 else if (iRandomName == 2) sName = "mary";
                 else if (iRandomName == 3) sName = "Frog";
                 else if (iRandomName == 4) sName = "john";
                 else if (iRandomName == 5) sName = "mist";
-                UnityAnalyticsIntegration.Instance().UserData(iGender, iYear, 0, sName);
+                int iLogLevel = 0;//LogLevel.Error
+                UnityAnalyticsIntegration.Instance().UserData(iGender, iYear, iLogLevel, sName);
             }
             if (GUI.Button(new Rect(210, 10, 190, 90), "Event:Quit"))
             {
-                int iCount = UnityEngine.Random.Range(1, 10);
+                iCount = UnityEngine.Random.Range(1, 10);
                 UnityAnalyticsIntegration.Instance().Customized("GameQuit", "how many times dies?", iCount);
                 //
 #if UNITY_EDITOR
@@ -62,51 +65,81 @@ public class Example : MonoBehaviour
             }
             if (GUI.Button(new Rect(10, 110, 190, 90), "Event:GameStart"))
             {
-                int iMoney = UnityEngine.Random.Range(1, 1000);
+                iMoney = UnityEngine.Random.Range(1, 1000);
                 UnityAnalyticsIntegration.Instance().Customized("GameStart", "how many money?", iMoney);
             }
-            if (GUI.Button(new Rect(210, 110, 190, 90), "Event:VersionCheck"))
+            if (GUI.Button(new Rect(210, 110, 190, 90), "Event:UserLevelCheck"))
             {
-                string s = Application.unityVersion;
-                UnityAnalyticsIntegration.Instance().Customized("VersionCheck", "unity version=", s);
+                //已證明:自定義事件不能儲存字串,它只有sum和count(for DAU),和average
+                int iLevel = UnityEngine.Random.Range(1, 101);//1~100
+                UnityAnalyticsIntegration.Instance().Customized("LevelCheck", "User Level=", iLevel);
             }
-            if (GUI.Button(new Rect(410, 110, 190, 90), "Event:GameVersionCheck"))
+            if (GUI.Button(new Rect(10, 210, 190, 90), "User Buy TWD 1"))
             {
-                string s = "1.0.0.1";
-                UnityAnalyticsIntegration.Instance().Customized("VersionCheck", "game version=", s);
-            }
-            if (GUI.Button(new Rect(10, 210, 190, 90), "User Buy item 1"))
-            {
-                int iCount = UnityEngine.Random.Range(1, 10);
+                iCount = UnityEngine.Random.Range(1, 10);
                 if (!IsRandom) iCount = 1;
                 for (int i = 0; i < iCount; i++)
                 {
-                    int iMoney = UnityEngine.Random.Range(1, 1000);
-                    UnityAnalyticsIntegration.Instance().Advanced("noodles", iMoney, "TWD");
+                    iMoney = UnityEngine.Random.Range(1, 1000);
+                    UnityAnalyticsIntegration.Instance().Advanced("food", iMoney, "TWD");
                 }
             }
-            if (GUI.Button(new Rect(210, 210, 190, 90), "User Buy item 2"))
+            if (GUI.Button(new Rect(210, 210, 190, 90), "User Buy USD 2"))
             {
-                int iCount = UnityEngine.Random.Range(1, 10);
+                iCount = UnityEngine.Random.Range(1, 10);
                 if (!IsRandom) iCount = 1;
                 for (int i = 0; i < iCount; i++)
                 {
-                    int iMoney = UnityEngine.Random.Range(1, 40);
-                    UnityAnalyticsIntegration.Instance().Advanced("sodawater", iMoney, "USD");
+                    iMoney = UnityEngine.Random.Range(1, 40);
+                    UnityAnalyticsIntegration.Instance().Advanced("water", iMoney, "USD");
                 }
             }
-            if (GUI.Button(new Rect(410, 210, 190, 90), "User Buy item 3"))
+            if (GUI.Button(new Rect(410, 210, 190, 90), "User Buy coin 3"))
             {
-                int iCount = UnityEngine.Random.Range(1, 10);
+                iCount = UnityEngine.Random.Range(1, 10);
                 if (!IsRandom) iCount = 1;
                 for (int i = 0; i < iCount; i++)
                 {
-                    int iMoney = UnityEngine.Random.Range(1, 200);
+                    iMoney = UnityEngine.Random.Range(1, 200);
                     UnityAnalyticsIntegration.Instance().Advanced("oil", iMoney, "DYCoin");
                 }
             }
-            string sTitle = (IsRandom) ? "Buy Random Count Item" : "Buy Single Item" ;
-            if (GUI.Button(new Rect(10, 310, 190, 90), sTitle)) IsRandom = !IsRandom;            
+            if (GUI.Button(new Rect(10, 310, 190, 90), "User Buy Custom 4"))
+            {
+                iCount = UnityEngine.Random.Range(1, 10);
+                if (!IsRandom) iCount = 1;
+                for (int i = 0; i < iCount; i++)
+                {
+                    iMoney = UnityEngine.Random.Range(1, 1000);
+                    UnityAnalyticsIntegration.Instance().Customized("Buy weapon", "Use DYcoin=", iMoney);
+                }
+            }
+            if (GUI.Button(new Rect(210, 310, 190, 90), "User Buy Custom 5"))
+            {
+                iCount = UnityEngine.Random.Range(1, 10);
+                if (!IsRandom) iCount = 1;
+                for (int i = 0; i < iCount; i++)
+                {
+                    iMoney = UnityEngine.Random.Range(1, 1000);
+                    UnityAnalyticsIntegration.Instance().Customized("Buy weapon", "Use gold=", iMoney);
+                }
+            }
+            if (GUI.Button(new Rect(410, 310, 190, 90), "User Buy Custom 6"))
+            {
+                iCount = UnityEngine.Random.Range(1, 10);
+                if (!IsRandom) iCount = 1;
+                for (int i = 0; i < iCount; i++)
+                {
+                    iMoney = UnityEngine.Random.Range(1, 1000);
+                    UnityAnalyticsIntegration.Instance().Customized("Buy armor", "Use DYcoin=", iMoney);
+                }
+            }
+            string sTitle = "Buy " + iCount + " Item=" + iMoney ;
+            if (GUI.Button(new Rect(10, 410, 190, 90), sTitle)) { IsRandom = !IsRandom; if (!IsRandom) iCount = 1; }
+            if (GUI.Button(new Rect(210, 410, 190, 90), "Customized Test Max 50"))
+            {
+                UnityAnalyticsIntegration.Instance().CustomizedTestLimit("Buy armor");
+            }
         }
 	}
 }
